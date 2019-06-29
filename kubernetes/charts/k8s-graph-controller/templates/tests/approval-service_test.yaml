@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-test"
+  annotations:
+    "helm.sh/hook": test-success
+    team: pay
+    repository: https://github.com/Tradeshift/tradeshift-approval-service
+  labels:
+    appType: tradeshift-component
+spec:
+  containers:
+  - name: {{ .Release.Name }}-test
+    image: byrnedo/alpine-curl
+    env:
+      - name: APPROVAL_SERVICE_HOST
+        value: {{ template "approval-service.name" . }}
+    command: ["sh", "-c", "curl --silent --show-error --fail --retry 30 --retry-delay 1 --max-time 2 --connect-timeout 2 http://$APPROVAL_SERVICE_HOST:8044/rest/external/health"]
+  restartPolicy: Never

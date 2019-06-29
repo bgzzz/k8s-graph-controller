@@ -1,0 +1,32 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: k8s-graph-controller
+  labels:
+    app: k8s-graph-controller
+    chart: k8s-graph-controller
+  annotations:
+    team: hackaton
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: k8s-graph-controller
+  template:
+    metadata:
+      labels:
+        app: k8s-graph-controller
+    spec:
+      containers:
+        - name: k8s-graph-controller
+          image: "gcr.io/tradeshift-test/k8s-graph-controller:latest"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+      serviceAccountName: k8s-graph-controller

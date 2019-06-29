@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-graph-controller
+  labels:
+    app: k8s-graph-controller
+    chart: k8s-graph-controller
+  annotations:
+    team: hackaton
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: k8s-graph-controller
